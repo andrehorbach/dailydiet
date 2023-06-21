@@ -16,7 +16,8 @@ export const Dialog = styled.View`
 `
 
 export const Title = styled.Text`
-  margin-bottom: 8px;
+  margin-bottom: 32px;
+  margin-top: 8px;
   text-align: center;
   ${({ theme }) => css`
     color:  ${theme.COLORS.GRAY_1};
@@ -27,5 +28,5 @@ export const Title = styled.Text`
 
 export const DividerContainer = styled.View`
   flex-direction: row;
-  border: 1px solid red;
+  gap: 12px;
 `

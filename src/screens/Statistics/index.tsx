@@ -15,7 +15,9 @@ export function Statistics() {
   return(
     <Container>
       <MainHeader 
-        asHeader
+        headerType="LARGE"
+        title="30,21%"
+        subTitle="das refeições dentro da dieta"
         onDiet
       />
       <StatisticsContainer>

@@ -1,24 +1,40 @@
 import { TouchableWithoutFeedback } from "react-native";
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { Container, Title, SubTitle, ArrowTopIcon, ArrowLeftIcon, Button } from './styles';
+import { 
+  Container, 
+  Title, 
+  SubTitle, 
+  ArrowTopIcon, 
+  ArrowLeftIcon, 
+  Button,
+  MainHeaderStyleProps 
+} from './styles';
 
 type Props = {
-  asHeader?: boolean,
-  onDiet?: boolean,
+  headerType?: MainHeaderStyleProps,
+  onDiet?: boolean | null,
   newMeal?: boolean,
+  title: string;
+  subTitle?: string;
 }
 
 
-export function MainHeader({asHeader = false, onDiet = false, newMeal = false }: Props) {  
+export function MainHeader({
+  headerType, 
+  onDiet = false, 
+  newMeal = false,
+  title,
+  subTitle,
+}: Props) {  
 
   const navigation = useNavigation();
   const route = useRoute();
 
 
   function handleNavigate() {
-    asHeader 
+    headerType !== "NOHEADER"
     ? 
-    navigation.navigate('home') 
+    navigation.goBack()
     :
     navigation.navigate('statistics') 
   }
@@ -26,16 +42,18 @@ export function MainHeader({asHeader = false, onDiet = false, newMeal = false }:
   return(
     <>
       <TouchableWithoutFeedback
-        onPress={asHeader ? undefined : handleNavigate}
+        onPress={headerType === "NOHEADER" ? handleNavigate : undefined }
       >
         <Container
-          asHeader={asHeader}
+          headerType={headerType}
           onDiet={onDiet}
           newMeal
         >
-          <Title>30,21%</Title>
-          <SubTitle>das refeições dentro da dieta</SubTitle>
-          { asHeader ?  
+          <Title headerType={headerType}>
+            {title}
+          </Title>
+          <SubTitle>{subTitle}</SubTitle>
+          { headerType !== "NOHEADER" ?  
           <Button
            onPress={handleNavigate}
           >

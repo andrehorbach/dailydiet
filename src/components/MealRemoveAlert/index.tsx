@@ -2,22 +2,30 @@ import { Modal } from "react-native";
 import { Container, Dialog, Title, DividerContainer } from "./styles"
 import { Button } from "@components/Button"
 
-export function MealRemoveAlert() {
+type Props = {
+  visible: boolean;
+  onPress: Function;
+}
+
+export function MealRemoveAlert({ visible, onPress } : Props) {
 
   return(
-    <Modal visible >
+    <Modal 
+      visible={visible}
+      transparent={true}
+    >
       <Container>
         <Dialog>
           <Title>Deseja realmente excluir o registro da refeição?</Title>
             <DividerContainer>
             <Button 
-                title="Sim" 
-                type="PRIMARY"
+                title="Cancelar" 
+                type="SECONDARY"
+                onPress={()=>onPress()}
                 noMargin
               />
               <Button 
-                title="Não" 
-                type="SECONDARY"
+                title="Sim, excluir" 
                 noMargin
               /> 
             </DividerContainer>

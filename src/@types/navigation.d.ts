@@ -8,6 +8,7 @@ export declare global {
       newmeal: undefined;
       feedback: undefined;
       meal: undefined;
+      editmeal: undefined;
       // players: {
       //   group: string;
       // }

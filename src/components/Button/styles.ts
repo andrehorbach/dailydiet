@@ -7,6 +7,7 @@ export type ButtonTypeStyleProps = "PRIMARY" | "SECONDARY"
 
 type Props = {
   type: ButtonTypeStyleProps;
+  noMargin?: boolean;
 }
 
 export const Container = styled(TouchableOpacity)<Props>`
@@ -16,7 +17,7 @@ export const Container = styled(TouchableOpacity)<Props>`
   min-height: 50px;
   max-height: 50px;
   border: 1px;
-  margin: 0 24px 8px 24px;
+  margin: ${({ noMargin }) => noMargin ? "0" : "0 24px 8px 24px"};
   border-color: ${({ theme }) => theme.COLORS.GRAY_1};
   border-radius: 6px;
   justify-content: center;

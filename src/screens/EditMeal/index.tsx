@@ -15,11 +15,11 @@ import { NewMealButton } from '@components/NewMealButton';
 import { Button } from '@components/Button';
 
 
-export function NewMeal() {
+export function EditMeal() {
 
   const navigation = useNavigation();
   const { COLORS } = useTheme();
-  const [ dietSelected, setDietSelected] = useState<boolean | undefined>(undefined);
+  const [ dietSelected, setDietSelected] = useState<boolean | null>(null);
 
   function handleDietSelect(diet: boolean) {
     diet ? setDietSelected(true) : setDietSelected(false)
@@ -35,8 +35,8 @@ export function NewMeal() {
     <Container>
       <MainHeader 
         headerType="SMALL"
-        title="Nova refeição"
-        onDiet={null}
+        title="Editar refeição"
+        onDiet={dietSelected}
       />
       <NewMealContainer>
         <Title>Nome</Title>

@@ -12,7 +12,7 @@ export const Container = styled(SafeAreaView)`
 export const MealContainer = styled.View `
   flex: 1;
   border-radius: 20px;
-  top: 104px;
+  top: 72px;
   padding: 33px 24px;
   ${({ theme }) => css`
     background-color: ${ theme.COLORS.GRAY_7};

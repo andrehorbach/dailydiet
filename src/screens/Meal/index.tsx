@@ -22,22 +22,23 @@ export function Meal() {
 
   const navigation = useNavigation();
   const { COLORS } = useTheme();
-  const [ dietSelected, setDietSelected] = useState<boolean | undefined>(undefined);
+  const [ dietSelected, setDietSelected] = useState<boolean | undefined>(false);
+  const [ deleteMealDialog, setDeleteMealDialog ] = useState(false);
 
-  function handleDietSelect(diet: boolean) {
-    diet ? setDietSelected(true) : setDietSelected(false)
+  function handleEditMealDialog() {
+    navigation.navigate('editmeal')
   }
 
-  function handleSubmit() {
-
-    navigation.navigate('feedback');
-
+  function handleDeleteMealDialog() {
+    setDeleteMealDialog(!deleteMealDialog)
   }
 
   return(
     <Container>
       <MainHeader 
-        asHeader
+        headerType="SMALL"
+        onDiet={dietSelected}
+        title='Refeição'
       />
       <MealContainer>
        <MealTitle>Sanduíche</MealTitle>
@@ -51,15 +52,18 @@ export function Meal() {
       <Button
         title={"Editar refeição"}
         iconName={"PENCIL"}
-        onPress={()=>{}}
+        onPress={handleEditMealDialog}
       /> 
       <Button
         title={"Excluir refeição"}
         iconName={"TRASH"}
         type="SECONDARY"
-        onPress={()=>{}}
+        onPress={handleDeleteMealDialog}
       /> 
-      <MealRemoveAlert />
+      <MealRemoveAlert 
+        visible={deleteMealDialog ? true : false}
+        onPress={handleDeleteMealDialog}
+      />
     </Container>
   )
 }
