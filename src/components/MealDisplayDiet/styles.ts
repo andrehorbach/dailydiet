@@ -10,7 +10,7 @@ type Props = {
   selected?: boolean;
 }
 
-export const Container = styled(TouchableOpacity)<Props>`
+export const Container = styled.View<Props>`
   width: 47%;
   flex-direction: row;
   gap: 8px;

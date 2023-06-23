@@ -82,8 +82,6 @@ export function EditMeal() {
             activeOpacity={1}
           />
         </DividerContainer>
-
-
       </NewMealContainer>
       <Button 
         style={{marginBottom: "5%", marginHorizontal: 24}}
