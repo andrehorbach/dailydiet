@@ -3,7 +3,19 @@ import { Container, Title, Dates } from './styles';
 import { MealCard } from '@components/MealCard';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-export function Meals() {  
+type Meal = {
+  mealTitle: string;
+  mealDesc: string;
+  mealDate: Date;
+  onDiet: boolean;
+};
+
+type Props = {
+  meals: Meal[];
+};
+
+
+export function Meals( { meals } : Props) {  
 
   const navigation = useNavigation();
 
@@ -31,28 +43,15 @@ export function Meals() {
           marginBottom: 0
         }}
       />  
-      <Dates>12.08.22</Dates>
-      <MealCard 
-        title="Lasanha de frango com queijo"
+      {/* <Dates>12.08.22</Dates> // ajustar o mapping pra incluir datas*/} 
+      
+      { meals.map((meal: Meal) => (
+        <MealCard 
+        key={meal.mealDesc}
+        title={meal.mealTitle.substring(0, 28) + (meal.mealTitle.length >= 28 ? "..." : "")}
         onPress={handleGoToMeal}
       />
-      <MealCard 
-        title="Lasanha de frango com queijo"
-        onPress={handleGoToMeal}
-      />
-      <MealCard 
-        title="Lasanha de frango com queijo"
-        onPress={handleGoToMeal}
-      />
-      <MealCard 
-        title="Lasanha de frango com queijo"
-        onPress={handleGoToMeal}
-      />
-      <MealCard 
-        title="Lasanha de frango com queijo"
-        onPress={handleGoToMeal}
-      />      
-
+      ))}
     </Container>
   )
 }
