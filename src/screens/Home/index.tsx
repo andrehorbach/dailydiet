@@ -1,46 +1,37 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Container } from './styles';
 import { MainHeader } from '@components/MainHeader';
 import { Header } from '@components/Header';
-import { Meals } from '@components/Meals';
+import { Meals, MealProps } from '@components/Meals';
+import { Loading } from '@components/Loading';
+import { mealsRetrieve } from '@storage/mealsRetrieve';
+import { useFocusEffect } from '@react-navigation/native';
 
 
 export function Home() {
 
-  const mealsArray = [
-    {
-      mealTitle: "Sanduíche Integral",
-      mealDesc: "Sanduíche de pão integral com atum e salada de alface e tomate",
-      mealDate: new Date(2023, 5, 30, 12, 0),
-      onDiet: true
-    },
-    {
-      mealTitle: "Salada de Frutas",
-      mealDesc: "Uma mistura refrescante de morangos, bananas e melancia",
-      mealDate: new Date(2023, 6, 1, 9, 30),
-      onDiet: true
-    },
-    {
-      mealTitle: "Arroz Integral com Legumes",
-      mealDesc: "Arroz integral com cenoura, ervilha e brócolis",
-      mealDate: new Date(2023, 6, 1, 12, 0),
-      onDiet: true
-    },
-    {
-      mealTitle: "Frango Grelhado com Batata Doce",
-      mealDesc: "Peito de frango grelhado acompanhado de batata doce assada",
-      mealDate: new Date(2023, 6, 2, 19, 0),
-      onDiet: true
-    },
-    {
-      mealTitle: "Sopa de Legumes",
-      mealDesc: "Uma deliciosa sopa quente repleta de legumes frescos",
-      mealDate: new Date(2023, 6, 3, 18, 30),
-      onDiet: true
-    }
-  ];
-
+  const [ meals, setMeals ] = useState<MealProps[]>([])
   const [ dietStatus, setDietStatus] = useState<boolean | null>(true);
+  const [ isLoading, setIsLoading] = useState(true);
+
+  async function fetchMeals() {
+
+    try {
+      setIsLoading(true)
+      const data = await mealsRetrieve();
+      setMeals(data);   
+    
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setIsLoading(false)
+    }
+  }
+
+  useFocusEffect(useCallback(() => {
+      fetchMeals();
+    }, [])
+  )
 
   return(
     <Container>
@@ -52,7 +43,7 @@ export function Home() {
         subTitle='das refeições dentro da dieta'
       />
       <Meals 
-        meals={mealsArray}
+        meals={meals}
       />
     </Container>
   )

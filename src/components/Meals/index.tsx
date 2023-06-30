@@ -1,17 +1,17 @@
 import { Button } from '@components/Button';
 import { Container, Title, Dates } from './styles';
 import { MealCard } from '@components/MealCard';
-import { useNavigation, useRoute } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 
-type Meal = {
+export type MealProps = {
   mealTitle: string;
   mealDesc: string;
   mealDate: Date;
-  onDiet: boolean;
+  onDiet: boolean | undefined;
 };
 
 type Props = {
-  meals: Meal[];
+  meals: MealProps[];
 };
 
 
@@ -23,11 +23,8 @@ export function Meals( { meals } : Props) {
     navigation.navigate('newmeal') 
   }
 
-  function handleGoToMeal() {
-    console.log("handleGoToMeal");
-    navigation.navigate('meal') 
-   
-    
+  function handleGoToMeal(meal: MealProps) {
+    navigation.navigate('meal', { meal }) 
   }
 
   return(
@@ -45,11 +42,11 @@ export function Meals( { meals } : Props) {
       />  
       {/* <Dates>12.08.22</Dates> // ajustar o mapping pra incluir datas*/} 
       
-      { meals.map((meal: Meal) => (
+      { meals.map((meal: MealProps) => (
         <MealCard 
         key={meal.mealDesc}
         title={meal.mealTitle.substring(0, 28) + (meal.mealTitle.length >= 28 ? "..." : "")}
-        onPress={handleGoToMeal}
+        onPress={()=>handleGoToMeal(meal)}
       />
       ))}
     </Container>

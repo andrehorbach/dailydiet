@@ -11,10 +11,11 @@ type Props = {
   title: string;
   type?: ButtonTypeStyleProps;
   selected?: boolean;
+  onDiet?: boolean;
 }
 
 
-export function MealDisplayDiet({title, type = "PRIMARY", selected = undefined, ...rest}: Props) {
+export function MealDisplayDiet({title, type = "PRIMARY", selected = undefined, onDiet, ...rest}: Props) {
 
   return( 
       <Container
@@ -22,7 +23,7 @@ export function MealDisplayDiet({title, type = "PRIMARY", selected = undefined, 
         selected={selected}
         {...rest}
       >
-        {<CircleIcon type={type} />}
+        {<CircleIcon type={onDiet ? "PRIMARY" : "SECONDARY"} />}
         <Title
           type={type}
         >

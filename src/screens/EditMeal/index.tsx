@@ -1,6 +1,8 @@
 import { useState } from 'react';
+import { Alert } from 'react-native';
 import { FlatList, ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { format } from 'date-fns'
 import { Input } from '@components/Input';
 import { 
   Container, 
@@ -13,81 +15,147 @@ import { MainHeader } from '@components/MainHeader';
 import { useTheme } from 'styled-components';
 import { NewMealButton } from '@components/NewMealButton';
 import { Button } from '@components/Button';
+import { MealProps } from '@components/Meals';
+import { mealEdit } from '@storage/mealEdit';
+import { AppError } from '@utils/AppError';
 
+type RouteParams = {
+  meal: MealProps;
+}
 
 export function EditMeal() {
 
   const navigation = useNavigation();
+
+  const [ mealTitle, setMealTitle] = useState<string>('');
+  const [ mealDesc, setMealDesc ] = useState<string>('');
+  const [ mealDate, setMealDate ] = useState<Date | null>(null);
+  const [ dateText, setDateText ] = useState('');
+  const [ timeText, setTimeText ] = useState('');
+  const [ onDiet, setOnDiet] = useState<boolean | undefined>(undefined);
+
   const { COLORS } = useTheme();
-  const [ dietSelected, setDietSelected] = useState<boolean | null>(null);
+  
+  const route = useRoute();
+  const { meal } = route.params as RouteParams;
+  
+  const mealCurrentDate = meal.mealDate ? format(new Date(meal.mealDate), 'dd/MM/yyyy') : '';
+  const mealCurrentTime = meal.mealDate ? format(new Date(meal.mealDate), 'hh:mm') : '';
 
+  console.log("meal:");
+  console.log(meal);
+  
   function handleDietSelect(diet: boolean) {
-    diet ? setDietSelected(true) : setDietSelected(false)
+    diet ? setOnDiet(true) : setOnDiet(false)
   }
 
-  function handleSubmit() {
-
-    navigation.navigate('feedback');
-
+  function handleCombineDateTime() {
+    const date = new Date(dateText);
+    const timeParts = timeText.split(':');
+    date.setHours(Number(timeParts[0]));
+    date.setMinutes(Number(timeParts[1]));
+    setMealDate(date);
   }
+
+  async function handleEditMeal() {
+  
+    if(!mealTitle.trim().length) {
+      return Alert.alert('Cadastrar refeição', 'Informe o nome da refeição!')
+    }
+
+    handleCombineDateTime();
+
+    const meal: MealProps = {
+      mealTitle,
+      mealDesc,
+      mealDate: mealDate || new Date(),
+      onDiet,
+    };
+
+    try {
+          await mealEdit(meal);
+          navigation.navigate('feedback')
+        }
+        catch(err) {
+          if(err instanceof AppError) {
+            Alert.alert('Nova Refeição', err.message)
+          }
+          else {
+            Alert.alert('Não foi possível criar nova refeição');
+            console.log(err);
+          }
+        }
+    } 
+
 
   return(
     <Container>
-      <MainHeader 
-        headerType="SMALL"
-        title="Editar refeição"
-        onDiet={dietSelected}
+    <MainHeader 
+      headerType="SMALL"
+      title="Editar refeição"
+      onDiet={null}
+    />
+    <NewMealContainer>
+      <Title>Nome</Title>
+      <Input 
+        onChangeText={setMealTitle}
+        value={meal.mealTitle}
       />
-      <NewMealContainer>
-        <Title>Nome</Title>
-        <Input />
-        <Title>Descrição</Title>
-        <Input 
-          style={{
-            minHeight: 120, 
-            maxHeight: 120, 
-            textAlignVertical: 'top'
-          }}
+      <Title>Descrição</Title>
+      <Input 
+        style={{
+          minHeight: 120, 
+          maxHeight: 120, 
+          textAlignVertical: 'top'
+        }}
+        onChangeText={setMealDesc}
+        value={meal.mealDesc}
+      />
+       <DividerContainer>
+        <DateHourInput>
+          <Title> Data </Title>
+          <Input 
+            placeholder="dd/mm/aaaa"
+            placeholderTextColor={ COLORS.GRAY_4 }
+            onChangeText={setDateText}
+            value={mealCurrentDate}
+          />
+        </DateHourInput>
+        <DateHourInput>
+          <Title> Hora </Title>
+          <Input 
+            placeholder="00:00"
+            placeholderTextColor={ COLORS.GRAY_4 }
+            onChangeText={setTimeText}
+            value={mealCurrentTime}
+          />
+        </DateHourInput>
+      </DividerContainer>
+      <Title>Está dentro da dieta?</Title>
+      <DividerContainer >
+        <NewMealButton 
+          title="Sim"
+          selected={meal.onDiet ? true : false}
+          onPress={()=>handleDietSelect(true)}
+          type="PRIMARY"
+          activeOpacity={1}
         />
-         <DividerContainer>
-          <DateHourInput>
-            <Title> Data </Title>
-            <Input 
-              placeholder="dd/mm/aaaa"
-              placeholderTextColor={ COLORS.GRAY_4 }
-            />
-          </DateHourInput>
-          <DateHourInput>
-            <Title> Hora </Title>
-            <Input 
-              placeholder="00:00"
-              placeholderTextColor={ COLORS.GRAY_4 }
-            />
-          </DateHourInput>
-        </DividerContainer>
-        <Title>Está dentro da dieta?</Title>
-        <DividerContainer >
-          <NewMealButton 
-            title="Sim"
-            selected={dietSelected ? true : false}
-            onPress={()=>handleDietSelect(true)}
-            type="PRIMARY"
-            activeOpacity={1}
-          />
-          <NewMealButton 
-            title="Não"
-            selected={dietSelected === false || undefined ? true : false}
-            onPress={()=>handleDietSelect(false)}
-            type="SECONDARY"
-            activeOpacity={1}
-          />
-        </DividerContainer>
-      </NewMealContainer>
-      <Button 
-        style={{marginBottom: "5%", marginHorizontal: 24}}
-        title="Cadastrar refeição"
-        onPress={handleSubmit}
-      />
-    </Container>
+        <NewMealButton 
+          title="Não"
+          selected={meal.onDiet ? false : true}
+          onPress={()=>handleDietSelect(false)}
+          type="SECONDARY"
+          activeOpacity={1}
+        />
+      </DividerContainer>
+
+
+    </NewMealContainer>
+    <Button 
+      style={{marginBottom: "5%", marginHorizontal: 24}}
+      title="Cadastrar refeição"
+      onPress={handleEditMeal}
+    />
+  </Container>
   )
 }

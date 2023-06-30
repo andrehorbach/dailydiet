@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FlatList, ScrollView, View } from 'react-native';
+import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Input } from '@components/Input';
 import { 
@@ -13,23 +13,64 @@ import { MainHeader } from '@components/MainHeader';
 import { useTheme } from 'styled-components';
 import { NewMealButton } from '@components/NewMealButton';
 import { Button } from '@components/Button';
+import { MealProps } from '@components/Meals';
+import { mealCreate } from '@storage/mealCreate';
+import { AppError } from '@utils/AppError';
 
 
 export function NewMeal() {
 
+  const [ mealTitle, setMealTitle] = useState<string>('');
+  const [ mealDesc, setMealDesc ] = useState<string>('');
+  const [ mealDate, setMealDate ] = useState<Date | null>(null);
+  const [ dateText, setDateText ] = useState('');
+  const [ timeText, setTimeText ] = useState('');
+  const [ onDiet, setOnDiet] = useState<boolean | undefined>(undefined);
+
   const navigation = useNavigation();
   const { COLORS } = useTheme();
-  const [ dietSelected, setDietSelected] = useState<boolean | undefined>(undefined);
-
+  
   function handleDietSelect(diet: boolean) {
-    diet ? setDietSelected(true) : setDietSelected(false)
+    diet ? setOnDiet(true) : setOnDiet(false)
   }
 
-  function handleSubmit() {
-
-    navigation.navigate('feedback');
-
+  function handleCombineDateTime() {
+    const date = new Date(dateText);
+    const timeParts = timeText.split(':');
+    date.setHours(Number(timeParts[0]));
+    date.setMinutes(Number(timeParts[1]));
+    setMealDate(date);
   }
+
+  async function handleCreateMeal() {
+  
+    if(!mealTitle.trim().length) {
+      return Alert.alert('Cadastrar refeição', 'Informe o nome da refeição!')
+    }
+
+    handleCombineDateTime();
+
+    const meal: MealProps = {
+      mealTitle,
+      mealDesc,
+      mealDate: mealDate || new Date(),
+      onDiet,
+    };
+
+    try {
+          await mealCreate(meal);
+          navigation.navigate('feedback')
+        }
+        catch(err) {
+          if(err instanceof AppError) {
+            Alert.alert('Nova Refeição', err.message)
+          }
+          else {
+            Alert.alert('Não foi possível criar nova refeição');
+            console.log(err);
+          }
+        }
+    } 
 
   return(
     <Container>
@@ -40,7 +81,9 @@ export function NewMeal() {
       />
       <NewMealContainer>
         <Title>Nome</Title>
-        <Input />
+        <Input 
+          onChangeText={setMealTitle}
+        />
         <Title>Descrição</Title>
         <Input 
           style={{
@@ -48,6 +91,7 @@ export function NewMeal() {
             maxHeight: 120, 
             textAlignVertical: 'top'
           }}
+          onChangeText={setMealDesc}
         />
          <DividerContainer>
           <DateHourInput>
@@ -55,6 +99,7 @@ export function NewMeal() {
             <Input 
               placeholder="dd/mm/aaaa"
               placeholderTextColor={ COLORS.GRAY_4 }
+              onChangeText={setDateText}
             />
           </DateHourInput>
           <DateHourInput>
@@ -62,6 +107,7 @@ export function NewMeal() {
             <Input 
               placeholder="00:00"
               placeholderTextColor={ COLORS.GRAY_4 }
+              onChangeText={setTimeText}
             />
           </DateHourInput>
         </DividerContainer>
@@ -69,14 +115,14 @@ export function NewMeal() {
         <DividerContainer >
           <NewMealButton 
             title="Sim"
-            selected={dietSelected ? true : false}
+            selected={onDiet ? true : false}
             onPress={()=>handleDietSelect(true)}
             type="PRIMARY"
             activeOpacity={1}
           />
           <NewMealButton 
             title="Não"
-            selected={dietSelected === false || undefined ? true : false}
+            selected={onDiet === false || undefined ? true : false}
             onPress={()=>handleDietSelect(false)}
             type="SECONDARY"
             activeOpacity={1}
@@ -88,8 +134,9 @@ export function NewMeal() {
       <Button 
         style={{marginBottom: "5%", marginHorizontal: 24}}
         title="Cadastrar refeição"
-        onPress={handleSubmit}
+        onPress={handleCreateMeal}
       />
     </Container>
   )
 }
+

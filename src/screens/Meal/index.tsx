@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FlatList, ScrollView, View } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { format } from 'date-fns'
 import { Input } from '@components/Input';
 import { 
   Container, 
@@ -11,22 +12,28 @@ import {
   DateTimeDescription
 } from './styles';
 import { MainHeader } from '@components/MainHeader';
-import { useTheme } from 'styled-components';
 import { MealDisplayDiet } from '@components/MealDisplayDiet';
 import { Button } from '@components/Button';
 import { MealRemoveAlert } from '@components/MealRemoveAlert';
+import { MealProps } from '@components/Meals';
 
-
+type RouteParams = {
+  meal: MealProps;
+}
 
 export function Meal() {
 
   const navigation = useNavigation();
-  const { COLORS } = useTheme();
-  const [ dietSelected, setDietSelected] = useState<boolean | undefined>(false);
   const [ deleteMealDialog, setDeleteMealDialog ] = useState(false);
 
-  function handleEditMealDialog() {
-    navigation.navigate('editmeal')
+  const route = useRoute();
+  const { meal } = route.params as RouteParams;
+   
+  const mealCurrentDate = meal.mealDate ? format(new Date(meal.mealDate), 'dd/MM/yyyy') : '';
+  const mealCurrentTime = meal.mealDate ? format(new Date(meal.mealDate), 'hh:mm') : '';
+
+  function handleEditMealDialog(meal: MealProps) {
+    navigation.navigate('editmeal', { meal })
   }
 
   function handleDeleteMealDialog() {
@@ -37,22 +44,23 @@ export function Meal() {
     <Container>
       <MainHeader 
         headerType="SMALL"
-        onDiet={dietSelected}
+        onDiet={meal.onDiet}
         title='Refeição'
       />
       <MealContainer>
-       <MealTitle>Sanduíche</MealTitle>
-       <MealDescription>Sanduíche de pão integral com atum e salada de alface e tomate</MealDescription>
+       <MealTitle>{meal.mealTitle}</MealTitle>
+       <MealDescription>{meal.mealDesc}</MealDescription>
        <DateTimeTitle>Data e hora</DateTimeTitle>
-       <DateTimeDescription>12/08/2022 às 16:00</DateTimeDescription>
+       <DateTimeDescription>{mealCurrentDate + " às " + mealCurrentTime}</DateTimeDescription>
        <MealDisplayDiet 
-        title="dentro da dieta"
+        title={meal.onDiet ? "dentro da dieta" : "fora da dieta"}
+        onDiet={meal.onDiet}
        />
       </MealContainer>
       <Button
         title={"Editar refeição"}
         iconName={"PENCIL"}
-        onPress={handleEditMealDialog}
+        onPress={()=>handleEditMealDialog(meal)}
       /> 
       <Button
         title={"Excluir refeição"}

@@ -7,11 +7,8 @@ export declare global {
       statistics: undefined;
       newmeal: undefined;
       feedback: undefined;
-      meal: undefined;
-      editmeal: undefined;
-      // players: {
-      //   group: string;
-      // }
+      meal: {};
+      editmeal: {};
     }
   }
 }

@@ -4,7 +4,7 @@ export const Container = styled.View`
   flex: 1;
   justify-content: center;
   align-items: center;
-  background-color: ${({ theme }) => theme.COLORS.GRAY_2};
+  background-color: ${({ theme }) => theme.COLORS.GRAY_7};
   position: absolute;
   top: 0;
   bottom: 0;

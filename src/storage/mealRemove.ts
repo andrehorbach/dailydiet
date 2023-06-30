@@ -1,8 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MEALS_COLLECTION } from "./storageConfig";
 import { mealsRetrieve } from "./mealsRetrieve";
+import { MealProps } from "@components/Meals";
 
-export async function mealRemove(mealToRemove: string) {
+export async function mealRemove(mealToRemove: MealProps) {
 
   try {
 
