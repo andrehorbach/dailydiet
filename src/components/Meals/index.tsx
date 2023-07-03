@@ -8,6 +8,7 @@ export type MealProps = {
   mealDesc: string;
   mealDate: Date;
   onDiet: boolean | undefined;
+  mealId: number;
 };
 
 type Props = {
@@ -47,6 +48,7 @@ export function Meals( { meals } : Props) {
         key={meal.mealDesc}
         title={meal.mealTitle.substring(0, 28) + (meal.mealTitle.length >= 28 ? "..." : "")}
         onPress={()=>handleGoToMeal(meal)}
+        onDiet={meal.onDiet}
       />
       ))}
     </Container>

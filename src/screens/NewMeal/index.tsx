@@ -55,6 +55,7 @@ export function NewMeal() {
       mealDesc,
       mealDate: mealDate || new Date(),
       onDiet,
+      mealId: 0, // vai ter que setar ao salvar
     };
 
     try {

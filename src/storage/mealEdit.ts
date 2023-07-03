@@ -5,19 +5,19 @@ import { AppError } from '@utils/AppError';
 import { MealProps } from "@components/Meals";
 
 
-export async function mealEdit(newMeal: MealProps) {
+export async function mealEdit(mealToEdit: MealProps) {
 
   try {
 
     const storedMeals = await mealsRetrieve();
 
-    const mealAlreadyExists = storedMeals.includes(newMeal) // arrumar validação pra incluir a data!
+    storedMeals.forEach((meal, index) => {
+      if (meal.mealId === mealToEdit.mealId) {
+        storedMeals[index] = mealToEdit;
+      }
+    })
 
-    if (mealAlreadyExists) {
-      throw new AppError('Esta refeição já foi cadastrada!')
-    }
-
-    await AsyncStorage.setItem(MEALS_COLLECTION, JSON.stringify([...storedMeals, newMeal]));
+    await AsyncStorage.setItem(MEALS_COLLECTION, JSON.stringify(storedMeals));
 
   } catch(err) {
     

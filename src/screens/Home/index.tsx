@@ -6,6 +6,7 @@ import { Meals, MealProps } from '@components/Meals';
 import { Loading } from '@components/Loading';
 import { mealsRetrieve } from '@storage/mealsRetrieve';
 import { useFocusEffect } from '@react-navigation/native';
+import { mealsReset } from '@storage/mealsReset';
 
 
 export function Home() {
@@ -20,7 +21,8 @@ export function Home() {
       setIsLoading(true)
       const data = await mealsRetrieve();
       setMeals(data);   
-    
+      //console.log(data);
+      
     } catch (err) {
       console.log(err);
     } finally {
@@ -32,6 +34,8 @@ export function Home() {
       fetchMeals();
     }, [])
   )
+
+  // mealsReset();
 
   return(
     <Container>

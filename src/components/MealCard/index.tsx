@@ -9,9 +9,10 @@ import {
 
 type Props = TouchableOpacityProps & {
   title: string;
+  onDiet: boolean | undefined;
 }
 
-export function MealCard({title, onPress, ...rest}: Props) {  
+export function MealCard({title, onDiet, onPress, ...rest}: Props) {  
   return(
     <Container
       onPress={onPress}
@@ -20,6 +21,7 @@ export function MealCard({title, onPress, ...rest}: Props) {
       <Divider />
       <DescriptionText>{title}</DescriptionText>
       <CircleIcon 
+        type={onDiet ? "PRIMARY" : "SECONDARY"}
       />
     </Container>
   )

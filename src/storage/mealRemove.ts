@@ -9,7 +9,11 @@ export async function mealRemove(mealToRemove: MealProps) {
 
     const storedMeals = await mealsRetrieve();
 
-    const updatedMeals = storedMeals.filter(meal => meal !== mealToRemove)
+    console.log(mealToRemove);
+
+    const updatedMeals = storedMeals.filter(meal => meal.mealId !== mealToRemove.mealId)
+
+    console.log(updatedMeals);
 
     await AsyncStorage.setItem(MEALS_COLLECTION, JSON.stringify(updatedMeals));
 

@@ -17,6 +17,7 @@ import { Button } from '@components/Button';
 import { MealRemoveAlert } from '@components/MealRemoveAlert';
 import { MealProps } from '@components/Meals';
 
+
 type RouteParams = {
   meal: MealProps;
 }
@@ -31,6 +32,7 @@ export function Meal() {
    
   const mealCurrentDate = meal.mealDate ? format(new Date(meal.mealDate), 'dd/MM/yyyy') : '';
   const mealCurrentTime = meal.mealDate ? format(new Date(meal.mealDate), 'hh:mm') : '';
+
 
   function handleEditMealDialog(meal: MealProps) {
     navigation.navigate('editmeal', { meal })
@@ -71,6 +73,7 @@ export function Meal() {
       <MealRemoveAlert 
         visible={deleteMealDialog ? true : false}
         onPress={handleDeleteMealDialog}
+        mealToDelete={meal}
       />
     </Container>
   )

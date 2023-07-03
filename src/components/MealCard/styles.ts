@@ -2,8 +2,10 @@ import { TouchableOpacity } from 'react-native';
 import styled, { css } from "styled-components/native";
 import { Circle } from "phosphor-react-native";
 
-type CircleIconProps = {
-  inDiet: boolean;
+export type ButtonTypeStyleProps = "PRIMARY" | "SECONDARY"
+
+type Props = {
+  type: ButtonTypeStyleProps;
 }
 
 export const Container = styled(TouchableOpacity)`
@@ -43,13 +45,13 @@ export const Divider = styled.View`
   background-color: ${({ theme }) => theme.COLORS.GRAY_4};
 `
 
-export const CircleIcon = styled(Circle).attrs<CircleIconProps>(
-  ({ theme, inDiet }) => ({
+export const CircleIcon = styled(Circle).attrs<Props>(
+  ({ theme, type }) => ({
     size: 18,
     weight: 'fill',
-    color: inDiet ? theme.COLORS.GREEN_MID : theme.COLORS.RED_MID,
+    color: type === "PRIMARY" ? theme.COLORS.GREEN_MID : theme.COLORS.RED_MID,
   })
-)`
+)<Props>`
   margin-left: auto;
   margin-right: 4px;
 `;

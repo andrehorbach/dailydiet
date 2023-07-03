@@ -26,24 +26,22 @@ type RouteParams = {
 export function EditMeal() {
 
   const navigation = useNavigation();
-
-  const [ mealTitle, setMealTitle] = useState<string>('');
-  const [ mealDesc, setMealDesc ] = useState<string>('');
-  const [ mealDate, setMealDate ] = useState<Date | null>(null);
-  const [ dateText, setDateText ] = useState('');
-  const [ timeText, setTimeText ] = useState('');
-  const [ onDiet, setOnDiet] = useState<boolean | undefined>(undefined);
-
-  const { COLORS } = useTheme();
-  
+  const mealId = 0; // arrumar na função mealEdit.ts
   const route = useRoute();
   const { meal } = route.params as RouteParams;
-  
   const mealCurrentDate = meal.mealDate ? format(new Date(meal.mealDate), 'dd/MM/yyyy') : '';
   const mealCurrentTime = meal.mealDate ? format(new Date(meal.mealDate), 'hh:mm') : '';
 
+  const [ mealTitle, setMealTitle] = useState<string>(meal.mealTitle);
+  const [ mealDesc, setMealDesc ] = useState<string>(meal.mealDesc);
+  const [ mealDate, setMealDate ] = useState<Date | null>(meal.mealDate);
+  const [ dateText, setDateText ] = useState(mealCurrentDate);
+  const [ timeText, setTimeText ] = useState(mealCurrentTime);
+  const [ onDiet, setOnDiet] = useState<boolean | undefined>(meal.onDiet);
+
+  const { COLORS } = useTheme();
+
   console.log("meal:");
-  console.log(meal);
   
   function handleDietSelect(diet: boolean) {
     diet ? setOnDiet(true) : setOnDiet(false)
@@ -70,6 +68,7 @@ export function EditMeal() {
       mealDesc,
       mealDate: mealDate || new Date(),
       onDiet,
+      mealId,
     };
 
     try {
@@ -87,7 +86,6 @@ export function EditMeal() {
         }
     } 
 
-
   return(
     <Container>
     <MainHeader 
@@ -99,7 +97,7 @@ export function EditMeal() {
       <Title>Nome</Title>
       <Input 
         onChangeText={setMealTitle}
-        value={meal.mealTitle}
+        value={mealTitle}
       />
       <Title>Descrição</Title>
       <Input 
@@ -109,7 +107,7 @@ export function EditMeal() {
           textAlignVertical: 'top'
         }}
         onChangeText={setMealDesc}
-        value={meal.mealDesc}
+        value={mealDesc}
       />
        <DividerContainer>
         <DateHourInput>
@@ -135,25 +133,24 @@ export function EditMeal() {
       <DividerContainer >
         <NewMealButton 
           title="Sim"
-          selected={meal.onDiet ? true : false}
+          selected={onDiet ? true : false}
           onPress={()=>handleDietSelect(true)}
           type="PRIMARY"
           activeOpacity={1}
         />
         <NewMealButton 
           title="Não"
-          selected={meal.onDiet ? false : true}
+          selected={onDiet ? false : true}
           onPress={()=>handleDietSelect(false)}
           type="SECONDARY"
           activeOpacity={1}
         />
       </DividerContainer>
 
-
     </NewMealContainer>
     <Button 
       style={{marginBottom: "5%", marginHorizontal: 24}}
-      title="Cadastrar refeição"
+      title="Salvar"
       onPress={handleEditMeal}
     />
   </Container>
