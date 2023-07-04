@@ -11,13 +11,14 @@ type Props = {
 export const Container = styled(TouchableOpacity)`
   flex-direction: row;
   gap: 12px;
+  margin-bottom: 8px;
   align-items: center;
   width: 100%;
   height: 50px;
   padding: 12px;  
   border: 1px;
   border-radius: 6px;
-  border-color: ${({ theme }) => theme.COLORS.GRAY_4};
+  border-color: ${({ theme }) => theme.COLORS.GRAY_5};
 
 `
 

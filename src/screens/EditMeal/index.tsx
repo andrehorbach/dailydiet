@@ -73,7 +73,7 @@ export function EditMeal() {
 
     try {
           await mealEdit(meal);
-          navigation.navigate('feedback')
+          navigation.navigate('home')
         }
         catch(err) {
           if(err instanceof AppError) {

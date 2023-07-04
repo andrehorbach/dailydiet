@@ -58,20 +58,21 @@ export function NewMeal() {
       mealId: 0, // vai ter que setar ao salvar
     };
 
-    try {
-          await mealCreate(meal);
-          navigation.navigate('feedback')
+  try {
+        await mealCreate(meal);
+        navigation.navigate('feedback', { onDiet })
+      }
+      catch(err) {
+        if(err instanceof AppError) {
+          Alert.alert('Nova Refeição', err.message)
         }
-        catch(err) {
-          if(err instanceof AppError) {
-            Alert.alert('Nova Refeição', err.message)
-          }
-          else {
-            Alert.alert('Não foi possível criar nova refeição');
-            console.log(err);
-          }
+        else {
+          Alert.alert('Não foi possível criar nova refeição');
+          console.log(err);
         }
-    } 
+      }
+  } 
+
 
   return(
     <Container>

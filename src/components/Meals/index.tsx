@@ -1,7 +1,9 @@
+import { FlatList } from 'react-native';
 import { Button } from '@components/Button';
-import { Container, Title, Dates } from './styles';
+import { Container, Title, Dates, ListGradient } from './styles';
 import { MealCard } from '@components/MealCard';
 import { useNavigation } from '@react-navigation/native';
+import { useTheme } from 'styled-components';
 
 export type MealProps = {
   mealTitle: string;
@@ -19,6 +21,7 @@ type Props = {
 export function Meals( { meals } : Props) {  
 
   const navigation = useNavigation();
+  const { COLORS } = useTheme();
 
   function handleNewMeal() {
     navigation.navigate('newmeal') 
@@ -42,15 +45,23 @@ export function Meals( { meals } : Props) {
         }}
       />  
       {/* <Dates>12.08.22</Dates> // ajustar o mapping pra incluir datas*/} 
-      
-      { meals.map((meal: MealProps) => (
-        <MealCard 
-        key={meal.mealDesc}
-        title={meal.mealTitle.substring(0, 28) + (meal.mealTitle.length >= 28 ? "..." : "")}
-        onPress={()=>handleGoToMeal(meal)}
-        onDiet={meal.onDiet}
+        
+
+      <FlatList 
+        data={meals}
+        keyExtractor={item => (item && item.mealId ? item.mealId.toString() : "")}
+        renderItem={({ item }) => (
+          <MealCard 
+          key={item.mealId}
+          title={item.mealTitle.substring(0, 28) + (item.mealTitle.length >= 28 ? "..." : "")}
+          onPress={()=>handleGoToMeal(item)}
+          onDiet={item.onDiet}
+        />
+        )}      
       />
-      ))}
+      <ListGradient 
+        colors={['transparent', COLORS.GRAY_6]}
+      />
     </Container>
   )
 }

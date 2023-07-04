@@ -1,6 +1,10 @@
 import styled, { css } from "styled-components/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+type Props = {
+  onDiet: boolean;
+}
+
 export const Container = styled(SafeAreaView)`
   flex: 1;
   align-items: center;
@@ -9,10 +13,15 @@ export const Container = styled(SafeAreaView)`
   width: 100%;
 `
 
-export const Title = styled.Text`
+export const Title = styled.Text<Props>`
+  color: ${({ theme, onDiet }) => 
+    onDiet ? 
+    theme.COLORS.GREEN_DARK
+    :
+    theme.COLORS.RED_DARK
+  };
   margin-bottom: 8px;
   ${({ theme }) => css`
-    color: ${theme.COLORS.GREEN_DARK};
     font-family: ${theme.FONT_FAMILY.BOLD};
     font-size: ${theme.FONT_SIZE.XL}px;
   `}

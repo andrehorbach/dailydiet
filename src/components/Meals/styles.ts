@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components/native";
+import { LinearGradient } from 'expo-linear-gradient';
 
 export const Container = styled.View`
   flex: 1;
@@ -23,4 +24,12 @@ export const Dates = styled.Text`
     line-height: ${theme.LINE_HEIGHT.DEFAULT}px;
   `}
   margin-top: 24px;
+`
+
+export const ListGradient = styled(LinearGradient)`
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 135px;
 `

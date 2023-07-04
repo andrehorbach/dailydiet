@@ -1,8 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { MEALS_COLLECTION } from "./storageConfig";
-import { mealsRetrieve } from "./mealsRetrieve";
-import { AppError } from '@utils/AppError';
-import { MealProps } from "@components/Meals";
 
 const mealsArray = [
   {
@@ -27,49 +24,49 @@ const mealsArray = [
     onDiet: true
   },
   {
-    mealId: 2,
+    mealId: 3,
     mealTitle: "Frango Grelhado com Batata Doce",
     mealDesc: "Peito de frango grelhado acompanhado de batata doce assada",
     mealDate: new Date(2023, 6, 2, 19, 0),
     onDiet: true
   },
   {
-    mealid: 3,
+    mealId: 4,
     mealTitle: "Sopa de Legumes",
     mealDesc: "Uma deliciosa sopa quente repleta de legumes frescos",
     mealDate: new Date(2023, 6, 3, 18, 30),
     onDiet: true
   },
   {
-    mealid: 4,
+    mealId: 5,
     mealTitle: "Pizza Margherita",
     mealDesc: "Deliciosa pizza com mussarela fresca, tomate e manjericão",
     mealDate: new Date(2023, 6, 4, 20, 0),
     onDiet: false
   },
   {
-    mealid: 5,
+    mealId: 6,
     mealTitle: "Cheeseburger com Batatas Fritas",
     mealDesc: "Hambúrguer clássico com queijo acompanhado de batatas fritas crocantes",
     mealDate: new Date(2023, 6, 5, 13, 0),
     onDiet: false
   },
   {
-    mealid: 6,
+    mealId: 7,
     mealTitle: "Macarrão à Carbonara",
     mealDesc: "Espaguete com um molho cremoso de bacon e queijo Parmesão",
     mealDate: new Date(2023, 6, 6, 19, 30),
     onDiet: false
   },
   {
-    mealid: 7,
+    mealId: 8,
     mealTitle: "Bife com Purê de Batatas",
     mealDesc: "Bife macio servido com um purê de batatas cremoso",
     mealDate: new Date(2023, 6, 7, 18, 0),
     onDiet: false
   },
   {
-    mealid: 8,
+    mealId: 9,
     mealTitle: "Sorvete Sundae",
     mealDesc: "Uma deliciosa sobremesa de sorvete com calda de chocolate, chantilly e confeitos",
     mealDate: new Date(2023, 6, 8, 15, 0),

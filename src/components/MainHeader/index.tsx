@@ -16,6 +16,13 @@ type Props = {
   newMeal?: boolean,
   title: string;
   subTitle?: string;
+  mealStats: {
+    totalMeals: number,
+    totalOnDiet: number,
+    totalOffDiet: number,
+    totalPercent: number,
+    bestSequence: number, 
+  },
 }
 
 
@@ -23,6 +30,7 @@ export function MainHeader({
   headerType, 
   onDiet = false, 
   newMeal = false,
+  mealStats,
   title,
   subTitle,
 }: Props) {  
@@ -38,7 +46,7 @@ export function MainHeader({
     :
     navigation.navigate('statistics') 
   }
-
+ 
   return(
     <>
       <TouchableWithoutFeedback

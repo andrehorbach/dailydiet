@@ -4,6 +4,9 @@ import feedbackNO from '@assets/feedbackNO.png';
 import { Button } from "@components/Button";
 import { useNavigation, useRoute } from '@react-navigation/native';
 
+type RouteParams = {
+  onDiet: boolean
+}
 
 export function Feedback() {
 
@@ -13,12 +16,27 @@ export function Feedback() {
     navigation.navigate('home');
   }
 
+  const route = useRoute();
+  const { onDiet } = route.params as RouteParams;
+
   return(
     <Container>
-        <Title>Continue assim!</Title>
-        <SubTitle>Você continua <StrongText>dentro da dieta</StrongText>. Muito bem!</SubTitle>
+        <Title
+          onDiet={onDiet}
+        >
+          {onDiet ? "Continue assim!" : "Que pena!"}
+        </Title>
+          {onDiet ? 
+            <SubTitle>
+              Você continua <StrongText>dentro da dieta</StrongText>. Muito bem! 
+            </SubTitle>
+            : <SubTitle>
+                Você <StrongText>saiu da dieta</StrongText> dessa vez, mas continue se esforçando e não desista!
+              </SubTitle>
+          }  
+       
         <FeedbackImage 
-          source={feedbackYES}
+          source={ onDiet? feedbackYES : feedbackNO}
         />
         <Button
           title="Ir para página inicial"
