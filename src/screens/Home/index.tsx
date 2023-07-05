@@ -1,9 +1,8 @@
-import { useEffect, useContext, useState, useCallback } from 'react';
+import { useContext, useState, useCallback } from 'react';
 import { Container } from './styles';
 import { MainHeader } from '@components/MainHeader';
 import { Header } from '@components/Header';
 import { Meals, MealProps } from '@components/Meals';
-import { Loading } from '@components/Loading';
 import { mealsRetrieve } from '@storage/mealsRetrieve';
 import { useFocusEffect } from '@react-navigation/native';
 import { mealsReset } from '@storage/mealsReset';
@@ -34,6 +33,8 @@ export function Home() {
     }, [])
   )
   const mealStats = useContext(MealsContext);
+
+  // mealsReset();
   
   return(
     <Container>

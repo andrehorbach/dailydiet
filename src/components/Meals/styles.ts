@@ -24,6 +24,7 @@ export const Dates = styled.Text`
     line-height: ${theme.LINE_HEIGHT.DEFAULT}px;
   `}
   margin-top: 24px;
+  margin-bottom: 8px;
 `
 
 export const ListGradient = styled(LinearGradient)`
@@ -31,6 +32,6 @@ export const ListGradient = styled(LinearGradient)`
   bottom: 0;
   left: 0;
   right: 0;
-  height: 135px;
+  height: 75px;
   pointer-events: none;
 `

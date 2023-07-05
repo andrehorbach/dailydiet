@@ -1,5 +1,5 @@
 import { useEffect, createContext, useState, useCallback } from 'react';
-import { Meals, MealProps } from '@components/Meals';
+import { MealProps } from '@components/Meals';
 import { Loading } from '@components/Loading';
 import { mealsRetrieve } from '@storage/mealsRetrieve';
 import { useFocusEffect } from '@react-navigation/native';
@@ -80,8 +80,6 @@ export const MealsProvider: React.FC<Props> = ({ children }) => {
 
     useFocusEffect(useCallback(() => {
         fetchMeals();
-        console.log("mealStats - MealsContext");
-        console.log(mealStats);
       }, [])
     )
 

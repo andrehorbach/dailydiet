@@ -4,6 +4,7 @@ import { Container, Title, Dates, ListGradient } from './styles';
 import { MealCard } from '@components/MealCard';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
+import { format } from 'date-fns';
 
 export type MealProps = {
   mealTitle: string;
@@ -30,6 +31,31 @@ export function Meals( { meals } : Props) {
   function handleGoToMeal(meal: MealProps) {
     navigation.navigate('meal', { meal }) 
   }
+  
+  function groupAndSortMealsByDate({ meals }: Props) {
+    const mealsByDate: { [date: string]: MealProps[] } = meals.reduce(
+      (acc: { [date: string]: MealProps[] }, meal) => {
+        const date = new Date(meal.mealDate).toDateString();
+        if (!acc[date]) {
+          acc[date] = [];
+        }
+        acc[date].push(meal);
+        return acc;
+      },
+      {}
+    );
+  
+    const sortedMealsByDate = Object.entries(mealsByDate)
+      .sort(([dateA], [dateB]) => new Date(dateB).getTime() - new Date(dateA).getTime())
+      .map(([date, meals]) => ({
+        date: new Date(date),
+        meals,
+      }));
+    return sortedMealsByDate;
+  }
+
+  const sortedMealsByDate = groupAndSortMealsByDate({meals}); // Call the function with the meals array
+
 
   return(
     <Container>
@@ -46,18 +72,27 @@ export function Meals( { meals } : Props) {
       />  
       {/* <Dates>12.08.22</Dates> // ajustar o mapping pra incluir datas*/} 
         
-
-      <FlatList 
-        data={meals}
-        keyExtractor={item => (item && item.mealId ? item.mealId.toString() : "")}
+      <FlatList
+        data={sortedMealsByDate}
+        keyExtractor={(item, index) => index.toString()}
+        showsVerticalScrollIndicator={false}
         renderItem={({ item }) => (
-          <MealCard 
-          key={item.mealId}
-          meal={item}
-          onPress={()=>handleGoToMeal(item)}
-        />
-        )}      
-      />
+          <>
+            <Dates>{format(item.date, "dd.MM.yy")}</Dates>
+            <FlatList
+              data={item.meals}
+              keyExtractor={(meal) => meal.mealId.toString()}
+              renderItem={({ item: meal }) => (
+                <MealCard
+                  key={meal.mealId}
+                  meal={meal}
+                  onPress={() => handleGoToMeal(meal)}
+                />
+              )}
+            />
+          </>
+      )}
+    />
       <ListGradient 
         colors={['transparent', COLORS.GRAY_6]}
       />

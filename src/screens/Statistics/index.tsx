@@ -9,7 +9,7 @@ import {
   MealsCount
 } from './styles';
 import { MainHeader } from '@components/MainHeader';
-import { MealsContext, MealsProvider } from '@contexts/MealsContext';
+import { MealsContext } from '@contexts/MealsContext';
 
 export function Statistics() {
 
