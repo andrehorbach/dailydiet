@@ -32,4 +32,5 @@ export const ListGradient = styled(LinearGradient)`
   left: 0;
   right: 0;
   height: 135px;
+  pointer-events: none;
 `

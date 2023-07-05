@@ -53,9 +53,8 @@ export function Meals( { meals } : Props) {
         renderItem={({ item }) => (
           <MealCard 
           key={item.mealId}
-          title={item.mealTitle.substring(0, 28) + (item.mealTitle.length >= 28 ? "..." : "")}
+          meal={item}
           onPress={()=>handleGoToMeal(item)}
-          onDiet={item.onDiet}
         />
         )}      
       />

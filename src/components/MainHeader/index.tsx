@@ -14,14 +14,15 @@ type Props = {
   headerType?: MainHeaderStyleProps,
   onDiet?: boolean | null,
   newMeal?: boolean,
-  title: string;
+  title?: string;
   subTitle?: string;
-  mealStats: {
-    totalMeals: number,
-    totalOnDiet: number,
-    totalOffDiet: number,
-    totalPercent: number,
-    bestSequence: number, 
+  mealStats?: {
+    totalMeals: number;
+    totalOnDiet: number;
+    totalOffDiet: number;
+    totalPercent: number;
+    bestSequence: number;
+    onDiet: boolean | undefined;
   },
 }
 

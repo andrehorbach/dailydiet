@@ -6,22 +6,24 @@ import {
   Divider, 
   CircleIcon
 } from './styles';
+import { MealProps } from '@components/Meals';
+import { format } from 'date-fns';
 
 type Props = TouchableOpacityProps & {
-  title: string;
-  onDiet: boolean | undefined;
+  meal: MealProps,
 }
 
-export function MealCard({title, onDiet, onPress, ...rest}: Props) {  
+export function MealCard({meal, onPress, ...rest}: Props) {  
+
   return(
     <Container
       onPress={onPress}
     >
-      <TimeText>20:00</TimeText>
+      <TimeText>{format(new Date(meal.mealDate), "hh:mm")}</TimeText>
       <Divider />
-      <DescriptionText>{title}</DescriptionText>
+      <DescriptionText>{meal.mealTitle.substring(0, 28) + (meal.mealTitle.length >= 28 ? "..." : "")}</DescriptionText>
       <CircleIcon 
-        type={onDiet ? "PRIMARY" : "SECONDARY"}
+        type={meal.onDiet ? "PRIMARY" : "SECONDARY"}
       />
     </Container>
   )

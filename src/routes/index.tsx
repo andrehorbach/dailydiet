@@ -2,6 +2,7 @@ import { View } from 'react-native';
 import { useTheme } from 'styled-components/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { AppRoutes } from './app.routes';
+import { MealsProvider } from '@contexts/MealsContext';
 
 export function Routes() {
 
@@ -10,7 +11,9 @@ export function Routes() {
   return(
     <View style={{ flex: 1, backgroundColor: COLORS.GRAY_7}}>
       <NavigationContainer>
-        <AppRoutes />
+        <MealsProvider>
+          <AppRoutes />
+        </MealsProvider>
       </NavigationContainer>  
     </View>
   )
