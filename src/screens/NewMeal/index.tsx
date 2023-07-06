@@ -16,7 +16,8 @@ import { Button } from '@components/Button';
 import { MealProps } from '@components/Meals';
 import { mealCreate } from '@storage/mealCreate';
 import { AppError } from '@utils/AppError';
-
+import { isValid, format } from 'date-fns';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 export function NewMeal() {
 
@@ -26,12 +27,42 @@ export function NewMeal() {
   const [ dateText, setDateText ] = useState('');
   const [ timeText, setTimeText ] = useState('');
   const [ onDiet, setOnDiet] = useState<boolean | undefined>(undefined);
+  const [datePickerVisible, setDatePickerVisible] = useState<boolean>(false);
+  const [timePickerVisible, setTimePickerVisible] = useState<boolean>(false);
 
   const navigation = useNavigation();
   const { COLORS } = useTheme();
-  
-  function handleDietSelect(diet: boolean) {
-    diet ? setOnDiet(true) : setOnDiet(false)
+
+  function showDatePicker() {
+    setDatePickerVisible(true);
+  }
+
+  function hideDatePicker() {
+    setDatePickerVisible(false);
+  }
+
+  function handleDateConfirm(date: Date) {
+    setMealDate(date);
+    setDateText(format(date, "dd/MM/yyyy"));
+    hideDatePicker();
+  }
+
+  function showTimePicker() {
+    setTimePickerVisible(true);
+  }
+
+  function hideTimePicker() {
+    setTimePickerVisible(false);
+  }
+
+  function handleTimeConfirm(time: Date) {
+    // Update your mealDate state with the selected time
+    const updatedMealDate = mealDate ? new Date(mealDate) : new Date();
+    updatedMealDate.setHours(time.getHours());
+    updatedMealDate.setMinutes(time.getMinutes());
+    setMealDate(updatedMealDate);
+    setTimeText(format(updatedMealDate, "HH:mm"));
+    hideTimePicker();
   }
 
   function handleCombineDateTime() {
@@ -42,10 +73,22 @@ export function NewMeal() {
     setMealDate(date);
   }
 
+  function handleDietSelect(diet: boolean) {
+    diet ? setOnDiet(true) : setOnDiet(false)
+  }
+
   async function handleCreateMeal() {
   
-    if(!mealTitle.trim().length) {
-      return Alert.alert('Cadastrar refeição', 'Informe o nome da refeição!')
+    if (!mealTitle.trim().length || !mealDesc.trim().length) {
+      return Alert.alert('Cadastrar refeição', 'Preencha todos os campos!');
+    }
+
+    if (onDiet === undefined) {
+      return Alert.alert('Cadastrar refeição', 'Selecione se está dentro da dieta!');
+    }
+
+    if (!mealDate) {
+      return Alert.alert('Cadastrar refeição', 'Selecione uma data e hora!');
     }
 
     handleCombineDateTime();
@@ -55,7 +98,7 @@ export function NewMeal() {
       mealDesc,
       mealDate: mealDate || new Date(),
       onDiet,
-      mealId: 0, // vai ter que setar ao salvar
+      mealId: 0,
     };
 
   try {
@@ -73,8 +116,8 @@ export function NewMeal() {
       }
   } 
 
-
   return(
+
     <Container>
       <MainHeader 
         headerType="SMALL"
@@ -98,10 +141,20 @@ export function NewMeal() {
          <DividerContainer>
           <DateHourInput>
             <Title> Data </Title>
-            <Input 
+            <Input
+              editable={datePickerVisible ? false : true} 
               placeholder="dd/mm/aaaa"
               placeholderTextColor={ COLORS.GRAY_4 }
               onChangeText={setDateText}
+              value={mealDate && isValid(mealDate) ? format(mealDate, "dd/MM/yyyy") : ''}
+              onFocus={showDatePicker}
+            />
+            <DateTimePickerModal
+              isVisible={datePickerVisible}
+              mode="date"
+              date={mealDate ? new Date(mealDate) : new Date()}
+              onConfirm={handleDateConfirm}
+              onCancel={hideDatePicker}
             />
           </DateHourInput>
           <DateHourInput>
@@ -110,6 +163,15 @@ export function NewMeal() {
               placeholder="00:00"
               placeholderTextColor={ COLORS.GRAY_4 }
               onChangeText={setTimeText}
+              value={mealDate && isValid(mealDate) ? format(mealDate, "hh:mm") : ''}
+              onFocus={showTimePicker}
+            />
+            <DateTimePickerModal
+              isVisible={timePickerVisible}
+              mode="time"
+              date={mealDate ? new Date(mealDate) : new Date()}
+              onConfirm={handleTimeConfirm}
+              onCancel={hideDatePicker}
             />
           </DateHourInput>
         </DividerContainer>
@@ -130,15 +192,21 @@ export function NewMeal() {
             activeOpacity={1}
           />
         </DividerContainer>
-
-
       </NewMealContainer>
       <Button 
-        style={{marginBottom: "5%", marginHorizontal: 24}}
+        style={{
+          marginBottom: "5%", 
+          marginHorizontal: 24, 
+          position: "absolute", 
+          bottom: 0,
+          left: 0,
+          right: 0,
+        }}
         title="Cadastrar refeição"
         onPress={handleCreateMeal}
       />
     </Container>
+    
   )
 }
 

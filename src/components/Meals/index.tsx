@@ -5,6 +5,7 @@ import { MealCard } from '@components/MealCard';
 import { useNavigation } from '@react-navigation/native';
 import { useTheme } from 'styled-components';
 import { format } from 'date-fns';
+import { ListEmpty } from '@components/ListEmpty';
 
 export type MealProps = {
   mealTitle: string;
@@ -91,7 +92,17 @@ export function Meals( { meals } : Props) {
               )}
             />
           </>
-      )}
+        )}
+        ListEmptyComponent={()=>(
+          <ListEmpty 
+            messageTitle="Sem refeições!"
+            message="Que tal cadastrar uma nova refeição?"
+          />
+        )}
+        contentContainerStyle={[
+          {paddingBottom: 100},
+          meals.length === 0 && { flex: 1 }
+        ]}
     />
       <ListGradient 
         colors={['transparent', COLORS.GRAY_6]}

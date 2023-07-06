@@ -1,12 +1,17 @@
-import { Container, Message } from "./styles";
+import { Container, CookingIcon, Message, MessageTitle } from "./styles";
 
 type Props = {
-  message: string;
+  messageTitle: string,
+  message: string,
 }
 
-export function ListEmpty({ message }: Props) {
+export function ListEmpty({ messageTitle, message }: Props) {
   return (
     <Container>
+      <CookingIcon />
+      <MessageTitle>
+        {messageTitle}
+      </MessageTitle>
       <Message>
         {message}
       </Message>
